@@ -5,8 +5,10 @@ Compile as `g++ -W -Wall -g -O2 -std=c++11 find_cycles.cpp`.
 
 #### What it does:
 The program takes a set of circle lengths *X* and a an undirected Graph *G* as an input and:
-1. determines whether it contains chordless cycles of every length in *X* 
-2. determines whether it contains such an edge *e* that the first conditon doesn't hold for *G-e* 
+
+1. determines whether it contains chordless cycles of every length in *X*.
+
+2. determines whether it contains such an edge *e* that the first conditon doesn't hold for *G-e*.
 
 #### Input format:
 The first line contains one positive integer *K*.
