@@ -1,3 +1,4 @@
 find_cycles
+*.o
 *.out
 nauty26r7
