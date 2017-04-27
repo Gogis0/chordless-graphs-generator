@@ -37,8 +37,6 @@ int main() {
     EMPTYGRAPH(Q.front().g, MAXM, MAXN);
     Q.front().V = 1;
     
-    options.getcanon = TRUE;
-    options.defaultptn = FALSE;
     while (!Q.empty()) {
  
         G act = Q.front();
