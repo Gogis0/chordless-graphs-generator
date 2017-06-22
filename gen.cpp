@@ -1,15 +1,23 @@
 #include <queue>
 #include <set>
+#include <algorithm>
+#include <vector>
 #define MAXN 20
 #include "nauty26r7/nauty.h"
 
 // generate graphs up to MAX_VERTICES
 static const int MAX_VERTICES = 8;
+static const int MAX_CYCLE_LENGTH = 30;
 
 typedef struct {
     graph g[MAXN * MAXM];
     int V;
 } G;
+
+
+bool is_edge(G &graph, int i, int j) {
+    return ISELEMENT(GRAPHROW(graph.g, i, MAXM), j);
+}
 
 
 inline bool operator<(const G &A, const G &B) {
@@ -25,7 +33,64 @@ inline bool operator<(const G &A, const G &B) {
 }
 
 
+bool has_chordless_cycle(G graph, bool *lengths) {
+    int N = graph.V;
+    for (int i = 0; i < N - 2; i++) {
+        for (int j = i + 1; j < N - 1; j++) {
+            if (!is_edge(graph, i, j)) continue;
+            std::vector< std::vector<int> > candidates;
+
+            for (int k = j + 1; k < N; k++) {
+                if (!is_edge(graph, i, k)) continue;
+                if (is_edge(graph, j, k)) {
+                    if (lengths[3]) return true;
+                    continue;
+                }
+
+                std::vector<int> V = {j, i, k};
+                candidates.push_back(V);
+            }
+
+
+            while (!candidates.empty()) {
+                std::vector<int> V = candidates.back();
+                candidates.pop_back();
+
+                int k = V.back();
+                for (int m = i + 1; m < N; m++) {
+                    if (!is_edge(graph, m, k)) continue;
+                    if (find(V.begin(), V.end(), m) != V.end()) continue;
+                    bool is_chord = false;
+
+                    for (int l = 1; l < (int)V.size() - 1; l++) {
+                        if (is_edge(graph, m, V[l])) is_chord = true;
+                    }
+                    if (is_chord) continue;
+
+                    if (is_edge(graph, m, j) && lengths[V.size() + 1]) return true;
+                    else {
+                        V.push_back(m);
+                        candidates.push_back(V);
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+
 int main() {
+    // we generate small graphs, so we can afford representing the cycle lengths as this
+    bool lengths[MAX_CYCLE_LENGTH];
+    std::fill(lengths, lengths + MAX_CYCLE_LENGTH, false);
+    int M; scanf("%d", &M);
+    for (int i = 0; i < M; i++) {
+        int length;
+        scanf("%d", &length);
+        lengths[length] = true;
+    }
+
     int lab[MAXN], ptn[MAXN], orbits[MAXN];
     graph canong[MAXN*MAXM];
     statsblk stats;
@@ -92,7 +157,7 @@ int main() {
                 for (int j = 0; j < i; j++) ADDONEEDGE(a.g, a.V-1, j, MAXM);
 
                 densenauty(a.g, lab, ptn, orbits, &options, &stats, MAXM, a.V, canong);
-                if (orbits[lab[0]] == orbits[a.V - 1]) {
+                if (orbits[lab[0]] == orbits[a.V - 1] && !has_chordless_cycle(a, lengths)) {
                     //printf("pushed %d %d\n", a.V, i);
                     Q.push(a);
                 }
