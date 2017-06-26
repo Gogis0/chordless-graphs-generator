@@ -11,7 +11,7 @@ The program takes a set of circle lengths *X* and an undirected graph *G* as an 
 1. Determines whether it contains a chordless cycle of such a length that is in *X*.
 
 2. If it doesn't (i.e. the first condition isn't fulfilled), determines whether *G* contains an edge
-   *e* for which *G-e* fulfills condition 1. Such an edge we will call critical.
+   *e* for which *G-e* fulfills the condition 1. Such an edge we will call critical.
 
 #### Input format:
 The first line contains one positive integer *K*.
@@ -29,8 +29,8 @@ One line containing one of the 3 possible output messages, specifically:
 
 ### gen.cpp
 
-This program requires [nauty](http://pallini.di.uniroma1.it/index.html). It has been built using the
-version 26r7, byt newer versions will hopefully be compatible.
+This program requires [nauty](http://pallini.di.uniroma1.it/index.html). It has been built using 
+version *26r7*, but newer versions will hopefully be compatible.
 
 Compile as `g++ gen.cpp nauty26r7/nauty.a`.
 
