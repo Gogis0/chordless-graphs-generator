@@ -1,5 +1,4 @@
 ## Graphs without chordless cycles of given lengths
-## Grafy bez indukovanych cyklov danej dlzky
 
 ### find_cycles.cpp
 
